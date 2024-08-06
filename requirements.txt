@@ -1,0 +1,15 @@
+setuptools
+wheel
+Kekik
+httpx
+parsel
+fastapi
+uvicorn
+user_agents
+aiocached
+Kekik_fastapi_cache
+PyYAML
+Jinja2
+pymongo[srv]
+motor[srv]
+deepdiff

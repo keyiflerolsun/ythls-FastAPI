@@ -1,0 +1,8 @@
+# Bu araç @keyiflerolsun tarafından | @KekikAkademi için yazılmıştır.
+
+PROJE : ythls-FastAPI
+APP   :
+  HOST    : 0.0.0.0
+  PORT    : 3310
+  WORKERS : 3
+  CACHE   : 15        # ! Minutes

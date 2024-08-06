@@ -1,0 +1,20 @@
+# Bu araç @keyiflerolsun tarafından | @KekikAkademi için yazılmıştır.
+
+networks:
+  local:
+    driver: bridge
+
+services:
+  ythls-fastapi:
+    container_name : ythls-fastapi
+    image          : ythls-fastapi:latest
+    tty            : true
+    restart        : always
+    build          : .
+
+    volumes:
+      - .:/usr/src/ythls-FastAPI
+    networks:
+      - local
+    ports:
+      - 1453:3310
