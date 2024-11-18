@@ -10,7 +10,7 @@ from bson.json_util      import dumps, loads
 import os
 
 class SineWixDB:
-    def __init__(self, db_url="mongodb://keyif:kekik@10.0.2.200:27017", db_name="SineWixDB"):
+    def __init__(self, db_url="mongodb://keyif:kekik@10.0.1.0:27017", db_name="SineWixDB"):
         self.client:MongoClient = AsyncIOMotorClient(db_url)
         self.db:Database        = self.client[db_name]
 

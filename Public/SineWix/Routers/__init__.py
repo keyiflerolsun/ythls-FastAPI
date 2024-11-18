@@ -1,7 +1,8 @@
 # Bu araç @keyiflerolsun tarafından | @KekikAkademi için yazılmıştır.
 
-from fastapi import APIRouter
-from Core    import cache
+from fastapi  import APIRouter
+from Core     import cache
+from Settings import CACHE_TIME
 
 sinewix_router         = APIRouter()
 sinewix_global_message = {
@@ -11,7 +12,7 @@ sinewix_global_message = {
 }
 
 @sinewix_router.get("")
-@cache()
+@cache(expire=CACHE_TIME)
 async def get_sinewix_router():
     return sinewix_global_message
 

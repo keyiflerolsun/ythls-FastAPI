@@ -1,7 +1,8 @@
 # Bu araç @keyiflerolsun tarafından | @KekikAkademi için yazılmıştır.
 
-from fastapi import APIRouter
-from Core    import cache
+from fastapi  import APIRouter
+from Core     import cache
+from Settings import CACHE_TIME
 
 oxax_router         = APIRouter()
 oxax_global_message = {
@@ -10,7 +11,7 @@ oxax_global_message = {
 }
 
 @oxax_router.get("")
-@cache()
+@cache(expire=CACHE_TIME)
 async def get_oxax_router():
     return oxax_global_message
 

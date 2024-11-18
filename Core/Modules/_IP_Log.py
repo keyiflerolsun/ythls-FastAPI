@@ -2,8 +2,9 @@
 
 from httpx     import AsyncClient, Timeout
 from aiocached import cached
+from Settings  import CACHE_TIME
 
-@cached
+@cached(ttl=CACHE_TIME)
 async def ip_log(hedef_ip:str) -> dict[str, str]:
     oturum = AsyncClient(
         headers = {

@@ -1,7 +1,8 @@
 # Bu araç @keyiflerolsun tarafından | @KekikAkademi için yazılmıştır.
 
-from fastapi import APIRouter
-from Core    import cache
+from fastapi  import APIRouter
+from Core     import cache
+from Settings import CACHE_TIME
 
 youtube_router         = APIRouter()
 youtube_global_message = {
@@ -16,7 +17,7 @@ youtube_global_message = {
 }
 
 @youtube_router.get("")
-@cache()
+@cache(expire=CACHE_TIME)
 async def get_youtube_router():
     return youtube_global_message
 
