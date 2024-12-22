@@ -43,9 +43,14 @@ class YouTube:
 
         konsol.print(f"\n[yellow]{author_name} | {baslik}")
 
+        try:
+            author_logo = findall(r'channelAvatar":{"thumbnails":\[{"url":"(https://[^"]+)"', kaynak_kod)[0]
+        except IndexError:
+            author_logo = None
+
         return {
             "authorName" : author_name,
-            "authorLogo" : findall(r'channelAvatar":{"thumbnails":\[{"url":"(https://[^"]+)"', kaynak_kod)[0],
+            "authorLogo" : author_logo,
             "streamName" : baslik,
             "streamThumb": f"https://i.ytimg.com/vi/{video_id}/hqdefault.jpg",
             "streamUrl"  : m3u8_url
