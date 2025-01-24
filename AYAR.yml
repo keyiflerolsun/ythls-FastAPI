@@ -6,3 +6,7 @@ APP   :
   PORT    : 3310
   WORKERS : 1
   CACHE   : 15        # ! Minutes
+
+
+# * https://github.com/yt-dlp/yt-dlp/wiki/FAQ#i-extracted-a-video-url-but-it-does-not-play-on-another-machine--in-my-web-browser
+yt-dlp : false
