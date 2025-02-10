@@ -20,6 +20,7 @@ async def ip_log(hedef_ip:str) -> dict[str, str]:
         return {
             "ulke"   : veri["country"] or "",
             "il"     : veri["regionName"] or "",
+            "ilce"   : veri["city"] or "",
             "isp"    : veri["isp"] or "",
             "sirket" : veri["org"] or "",
             "host"   : veri["as"] or ""
