@@ -71,16 +71,16 @@ async def istekten_once_sonra(request: Request, call_next):
     )
     log_lines.append(header_line)
 
+    if log_veri["veri"]:
+        veri_line = f"[bold magenta]»[/] [bold cyan]{log_veri['veri']}[/]"
+        log_lines.append(veri_line)
+
     durum_line = (
         f"  {durum_label} [bold green]{log_veri['method']}[/]"
         f" [blue]-[/] [bold bright_yellow]{log_veri['kod']}[/]"
         f" [blue]-[/] [bold yellow2]{log_veri['sure']} sn[/]"
     )
     log_lines.append(durum_line)
-
-    if log_veri["veri"]:
-        veri_line = f"[bold magenta]»[/] [bold cyan]{log_veri['veri']}[/]"
-        log_lines.append(veri_line)
 
     if log_veri["id"]:
         ip_line = (
