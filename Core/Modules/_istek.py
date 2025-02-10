@@ -50,9 +50,8 @@ async def istekten_once_sonra(request: Request, call_next):
         async with asyncio.timeout(5):
             response        = await call_next(request)
             log_veri["kod"] = response.status_code
-    except Exception as hata:
-        konsol.log(f"[bold red][!] {hata}")
-        response        = JSONResponse(status_code=504, content={"ups": str(hata)})
+    except Exception:
+        response        = JSONResponse(status_code=504, content={"ups": "Zaman Aşımı.."})
         log_veri["kod"] = 504
 
     for skip_path in ("/favicon.ico", "/static", "/webfonts"):
