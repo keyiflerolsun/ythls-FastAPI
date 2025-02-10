@@ -1,10 +1,11 @@
 # Bu araç @keyiflerolsun tarafından | @KekikAkademi için yazılmıştır.
 
 from CLI                  import konsol
-from Core                 import kekik_FastAPI, Request
+from Core                 import kekik_FastAPI, Request, JSONResponse
 from time                 import time
 from user_agents          import parse
 from Core.Modules._IP_Log import ip_log
+import asyncio
 
 @kekik_FastAPI.middleware("http")
 async def istekten_once_sonra(request: Request, call_next):
@@ -18,13 +19,6 @@ async def istekten_once_sonra(request: Request, call_next):
         except Exception:
             form_data = await request.form()
             request.state.req_veri = dict(form_data.items())
-
-    response   = await call_next(request)
-    gecen_sure = time() - baslangic_zamani
-
-    for skip_path in ("/favicon.ico", "/static", "/webfonts"):
-        if skip_path in request.url.path:
-            return response
 
     try:
         ua_header = request.headers.get("User-Agent")
@@ -45,13 +39,32 @@ async def istekten_once_sonra(request: Request, call_next):
         "method" : request.method,
         "url"    : str(request.url).rstrip("?").split("?")[0],
         "veri"   : request.state.req_veri,
-        "kod"    : response.status_code,
-        "sure"   : round(gecen_sure, 2),
+        "kod"    : None,
+        "sure"   : None,
         "ip"     : log_ip,
         "cihaz"  : cihaz,
         "host"   : request.url.hostname,
     }
 
+    try:
+        async with asyncio.timeout(5):
+            response        = await call_next(request)
+            log_veri["kod"] = response.status_code
+    except Exception as hata:
+        konsol.log(f"[bold red][!] {hata}")
+        response        = JSONResponse(status_code=504, content={"ups": str(hata)})
+        log_veri["kod"] = 504
+
+    for skip_path in ("/favicon.ico", "/static", "/webfonts"):
+        if skip_path in request.url.path:
+            return response
+
+    log_veri["sure"] = round(time() - baslangic_zamani, 2)
+    await log_salla(log_veri, request)
+
+    return response
+
+async def log_salla(log_veri: dict, request: Request):
     log_url = (
         log_veri['url'].replace(request.url.scheme, request.headers.get("X-Forwarded-Proto"))
             if request.headers.get("X-Forwarded-Proto")
@@ -66,14 +79,10 @@ async def istekten_once_sonra(request: Request, call_next):
 
     log_lines = []
     
-    header_line = (
-        f"[bold blue]»[/] [bold turquoise2]{log_url}[/]"
-    )
-    log_lines.append(header_line)
+    log_lines.append(f"[bold blue]»[/] [bold turquoise2]{log_url}[/]")
 
     if log_veri["veri"]:
-        veri_line = f"[bold magenta]»[/] [bold cyan]{log_veri['veri']}[/]"
-        log_lines.append(veri_line)
+        log_lines.append(f"[bold magenta]»[/] [bold cyan]{log_veri['veri']}[/]")
 
     durum_line = (
         f"  {durum_label} [bold green]{log_veri['method']}[/]"
@@ -113,10 +122,7 @@ async def istekten_once_sonra(request: Request, call_next):
             )
         log_lines.append(konum_line)
 
-    cihaz_line = f"  {cihaz_label} [magenta]{log_veri['cihaz']}[/]"
-    log_lines.append(cihaz_line)
+    log_lines.append(f"  {cihaz_label} [magenta]{log_veri['cihaz']}[/]")
 
     final_log = "\n".join(log_lines)
     konsol.log(final_log + "\n")
-
-    return response
