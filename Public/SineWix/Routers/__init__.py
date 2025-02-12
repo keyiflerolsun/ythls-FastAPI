@@ -1,7 +1,7 @@
 # Bu araç @keyiflerolsun tarafından | @KekikAkademi için yazılmıştır.
 
 from fastapi  import APIRouter
-from Core     import cache
+from Core     import Request, kekik_cache
 from Settings import CACHE_TIME
 
 sinewix_router         = APIRouter()
@@ -12,8 +12,8 @@ sinewix_global_message = {
 }
 
 @sinewix_router.get("")
-@cache(expire=CACHE_TIME)
-async def get_sinewix_router():
+@kekik_cache(ttl=CACHE_TIME, is_fastapi=True)
+async def get_sinewix_router(request: Request):
     return sinewix_global_message
 
 from .movies import *

@@ -1,17 +1,15 @@
 # Bu araç @keyiflerolsun tarafından | @KekikAkademi için yazılmıştır.
 
 from fastapi             import FastAPI, Request, Response, HTTPException
-from Core.Modules        import lifespan
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses   import JSONResponse, HTMLResponse, RedirectResponse, PlainTextResponse, FileResponse
-from Kekik_fastapi_cache import cache
+from Kekik.cache         import kekik_cache
 
 kekik_FastAPI = FastAPI(
     title       = "Kekik-FastAPI",
     openapi_url = None,
     docs_url    = None,
-    redoc_url   = None,
-    lifespan    = lifespan
+    redoc_url   = None
 )
 
 # ! ----------------------------------------» Routers

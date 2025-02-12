@@ -1,9 +1,9 @@
 # Bu araç @keyiflerolsun tarafından | @KekikAkademi için yazılmıştır.
 
-from CLI       import konsol
-from yt_dlp    import YoutubeDL
-from aiocached import cached
-from Settings  import CACHE_TIME
+from CLI      import konsol
+from yt_dlp   import YoutubeDL
+from Core     import kekik_cache
+from Settings import CACHE_TIME
 
 class YouTube:
     def __init__(self):
@@ -14,7 +14,7 @@ class YouTube:
             "cookiefile"  : "cookies.txt"
         }
 
-    @cached(ttl=CACHE_TIME)
+    @kekik_cache(ttl=CACHE_TIME)
     async def __data(self, video_id: str) -> dict:
         with YoutubeDL(self.ydl_opts) as ydl:
             try:
@@ -35,11 +35,11 @@ class YouTube:
             "streamUrl"   : m3u8_url
         }
 
-    @cached(ttl=CACHE_TIME)
+    @kekik_cache(ttl=CACHE_TIME)
     async def video2data(self, id: str) -> dict:
         return await self.__data(id)
 
-    @cached(ttl=CACHE_TIME)
+    @kekik_cache(ttl=CACHE_TIME)
     async def kanal2data(self, channel_id: str) -> dict:
         with YoutubeDL(self.ydl_opts) as ydl:
             try:

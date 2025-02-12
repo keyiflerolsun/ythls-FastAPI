@@ -1,12 +1,12 @@
 # Bu araç @keyiflerolsun tarafından | @KekikAkademi için yazılmıştır.
 
 from .      import sinewix_router, sinewix_global_message
-from Core   import cache, HTTPException
+from Core   import Request, kekik_cache, HTTPException
 from ..Libs import SineWixDB
 
 @sinewix_router.get("/movie/{movie_id}")
-@cache(expire=6 * 60 * 60)
-async def get_movie(movie_id: str):
+@kekik_cache(ttl=6 * 60 * 60, is_fastapi=True)
+async def get_movie(request: Request, movie_id: str):
     try:
         sinewixdb = SineWixDB()
 
@@ -17,8 +17,8 @@ async def get_movie(movie_id: str):
         raise HTTPException(status_code=410, detail=f"{type(hata).__name__} » {hata}") from hata
 
 @sinewix_router.get("/movies/{sayfa}")
-@cache(expire=6 * 60 * 60)
-async def get_movies(sayfa: str):
+@kekik_cache(ttl=6 * 60 * 60, is_fastapi=True)
+async def get_movies(request: Request, sayfa: str):
     try:
         sinewixdb = SineWixDB()
 
@@ -29,8 +29,8 @@ async def get_movies(sayfa: str):
         raise HTTPException(status_code=410, detail=f"{type(hata).__name__} » {hata}") from hata
 
 @sinewix_router.get("/movies/{genre_id}/{sayfa}")
-@cache(expire=6 * 60 * 60)
-async def get_movies_genre(genre_id:str, sayfa: str):
+@kekik_cache(ttl=6 * 60 * 60, is_fastapi=True)
+async def get_movies_genre(request: Request, genre_id:str, sayfa: str):
     try:
         sinewixdb = SineWixDB()
 

@@ -6,8 +6,6 @@ parsel
 fastapi
 uvicorn
 user_agents
-aiocached
-Kekik_fastapi_cache
 PyYAML
 Jinja2
 python-multipart

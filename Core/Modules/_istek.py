@@ -47,9 +47,8 @@ async def istekten_once_sonra(request: Request, call_next):
     }
 
     try:
-        async with asyncio.timeout(5):
-            response        = await call_next(request)
-            log_veri["kod"] = response.status_code
+        response        = await asyncio.wait_for(call_next(request), timeout=5)
+        log_veri["kod"] = response.status_code
     except Exception:
         response        = JSONResponse(status_code=504, content={"ups": "Zaman Aşımı.."})
         log_veri["kod"] = 504

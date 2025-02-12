@@ -5,7 +5,7 @@ from parsel       import Selector
 from re           import findall, search
 from base64       import b64encode, b64decode
 from urllib.parse import quote, unquote
-from aiocached    import cached
+from Core         import kekik_cache
 from Settings     import CACHE_TIME
 
 class OxAx:
@@ -80,7 +80,7 @@ class OxAx:
 
         return cleanb64
 
-    @cached(ttl=CACHE_TIME)
+    @kekik_cache(ttl=CACHE_TIME)
     async def yayin_ver(self, link:str) -> str | None:
         istek = await self.oturum.get(link)
         if istek.status_code != 200:
@@ -105,7 +105,7 @@ class OxAx:
 
         return yayin_link if yayin_test.text else None
 
-    @cached(ttl=CACHE_TIME)
+    @kekik_cache(ttl=CACHE_TIME)
     async def __spisok_list(self, vse=int) -> list[str]:
         istek  = await self.oturum.get(f"http://oxax.tv/spisok?vse={vse}")
         secici = Selector(istek.text)
@@ -115,18 +115,18 @@ class OxAx:
                 for link in secici.xpath("//div[@class='tv_sp']")
         ]
 
-    @cached(ttl=CACHE_TIME)
+    @kekik_cache(ttl=CACHE_TIME)
     async def hd_kanal_listesi(self) -> list[str]:
         return await self.__spisok_list(2)
 
-    @cached(ttl=CACHE_TIME)
+    @kekik_cache(ttl=CACHE_TIME)
     async def porno_kanal_listesi(self) -> list[str]:
         return await self.__spisok_list(4)
 
-    @cached(ttl=CACHE_TIME)
+    @kekik_cache(ttl=CACHE_TIME)
     async def erotik_kanal_listesi(self) -> list[str]:
         return await self.__spisok_list(3)
 
-    @cached(ttl=CACHE_TIME)
+    @kekik_cache(ttl=CACHE_TIME)
     async def kanallari_al(self) -> list:
         return sorted({*await self.hd_kanal_listesi(), *await self.porno_kanal_listesi(), *await self.erotik_kanal_listesi()})

@@ -1,12 +1,12 @@
 # Bu araç @keyiflerolsun tarafından | @KekikAkademi için yazılmıştır.
 
 from .      import sinewix_router, sinewix_global_message
-from Core   import cache, HTTPException
+from Core   import Request, kekik_cache, HTTPException
 from ..Libs import SineWixDB
 
 @sinewix_router.get("/search/{metin}")
-@cache(expire=6 * 60 * 60)
-async def search(metin: str):
+@kekik_cache(ttl=6 * 60 * 60, is_fastapi=True)
+async def search(request: Request, metin: str):
     try:
         sinewixdb = SineWixDB()
 

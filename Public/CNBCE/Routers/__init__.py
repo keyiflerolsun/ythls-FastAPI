@@ -1,7 +1,7 @@
 # Bu araç @keyiflerolsun tarafından | @KekikAkademi için yazılmıştır.
 
 from fastapi  import APIRouter
-from Core     import cache
+from Core     import Request, kekik_cache
 from Settings import CACHE_TIME
 
 cnbce_router         = APIRouter()
@@ -11,8 +11,8 @@ cnbce_global_message = {
 }
 
 @cnbce_router.get("")
-@cache(expire=CACHE_TIME)
-async def get_cnbce_router():
+@kekik_cache(ttl=CACHE_TIME, is_fastapi=True)
+async def get_cnbce_router(request: Request):
     return cnbce_global_message
 
 from .cnbce import *
