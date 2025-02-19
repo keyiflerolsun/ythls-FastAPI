@@ -1,10 +1,10 @@
 # Bu araç @keyiflerolsun tarafından | @KekikAkademi için yazılmıştır.
 
-from CLI                  import konsol
-from Core                 import kekik_FastAPI, Request, JSONResponse
-from time                 import time
-from user_agents          import parse
-from Core.Modules._IP_Log import ip_log
+from CLI         import konsol
+from Core        import kekik_FastAPI, Request, JSONResponse
+from time        import time
+from user_agents import parse
+from ._IP_Log    import ip_log
 import asyncio
 
 @kekik_FastAPI.middleware("http")
@@ -47,11 +47,16 @@ async def istekten_once_sonra(request: Request, call_next):
     }
 
     try:
-        response        = await asyncio.wait_for(call_next(request), timeout=5)
-        log_veri["kod"] = response.status_code
-    except Exception:
-        response        = JSONResponse(status_code=504, content={"ups": "Zaman Aşımı.."})
+        # async with asyncio.timeout(7.5):
+        response = await asyncio.wait_for(call_next(request), timeout=7.5)
+        if response:
+            log_veri["kod"] = response.status_code
+        else:
+            log_veri["kod"] = 502
+            response        = JSONResponse(status_code=log_veri["kod"], content={"ups": "Yanit Gelmedi.."})
+    except asyncio.TimeoutError:
         log_veri["kod"] = 504
+        response        = JSONResponse(status_code=log_veri["kod"], content={"ups": "Zaman Aşımı.."})
 
     for skip_path in ("/favicon.ico", "/static", "/webfonts"):
         if skip_path in request.url.path:
